@@ -59,12 +59,17 @@ Now we will set up the Nginx web server as a reverse proxy so instead of accessi
     ##
     # You should look at the following URL's in order to grasp a solid understanding
     # of Nginx configuration files in order to fully unleash the power of Nginx.
-    # http://wiki.nginx.org/Pitfalls
-    # http://wiki.nginx.org/QuickStart
-    # http://wiki.nginx.org/Configuration
+    # https://www.nginx.com/resources/wiki/start/
+    # https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/
+    # https://wiki.debian.org/Nginx/DirectoryStructure
     #
-    # Generally, you will want to move this file somewhere, and start with a clean
-    # file but keep this around for reference. Or just disable in sites-enabled.
+    # In most cases, administrators will remove this file from sites-enabled/ and
+    # leave it as reference inside of sites-available where it will continue to be
+    # updated by the nginx packaging team.
+    #
+    # This file will automatically load configuration files provided by other
+    # applications, such as Drupal or Wordpress. These applications will be made
+    # available underneath a path with that package name, such as /drupal8.
     #
     # Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.
     ##
@@ -102,23 +107,17 @@ Now we will set up the Nginx web server as a reverse proxy so instead of accessi
                     # First attempt to serve request as file, then
                     # as directory, then fall back to displaying a 404.
                     try_files $uri $uri/ =404;
-                    # proxy_pass http://localhost:8080;
-                    # proxy_http_version 1.1;
-                    # proxy_set_header Upgrade $http_upgrade;
-                    # proxy_set_header Connection 'upgrade';
-                    # proxy_set_header Host $host;
-                    # proxy_cache_bypass $http_upgrade;
             }
 
-            # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+            # pass PHP scripts to FastCGI server
             #
             #location ~ \.php$ {
-            # include snippets/fastcgi-php.conf;
+            #       include snippets/fastcgi-php.conf;
             #
-            #       # With php7.0-cgi alone:
+            #       # With php-fpm (or other unix sockets):
+            #       fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+            #       # With php-cgi (or other tcp sockets):
             #       fastcgi_pass 127.0.0.1:9000;
-            #       # With php7.0-fpm:
-            #       fastcgi_pass unix:/run/php/php7.0-fpm.sock;
             #}
 
             # deny access to .htaccess files, if Apache's document root
@@ -145,7 +144,7 @@ Now we will set up the Nginx web server as a reverse proxy so instead of accessi
     #       index index.html;
     #
     #       location / {
-    #              try_files $uri $uri/ =404;
+    #               try_files $uri $uri/ =404;
     #       }
     #}
     ```
@@ -195,15 +194,21 @@ Now we will set up the Nginx web server as a reverse proxy so instead of accessi
 6. Next, we need to restart Nginx using the command as follows:
 
     ```bash
-    $ sudo service restart nginx
+    $ sudo service nginx restart
     ```
 
-7. Now, given the connection between VMs was established correctly, as outlined here, you should be able to navigate to your app folder using `cd app` and start your app using:
+7. Now, given the connection between VMs was established correctly (process outlined [here](https://github.com/bradley-woods/tech230-multimachine)) you should be able to navigate to your app folder using `cd app` and start your app using:
 
     ```bash
-    $ node app.js
+    app$ node app.js
     ```
 
+    ![App running](images/run-app.png)
+
 8. Finally, navigate to your browser and type in the address we specified in our nginx configuration file (192.168.10.100) and we should see the sample app webpage. If we enter '/posts' after the address we should also see the 'Recent Posts' content served by our database server.
+
+    ![Sample app homepage](images/app-homepage.png)
+
+    ![Posts page](images/posts-page.png)
 
     > **Note:** in practice, an SSL certificate should be used to encrypt the requests to the website so it can be made available via HTTPS, then the private IP address can be replaced with a domain name (<https://example.com>).
