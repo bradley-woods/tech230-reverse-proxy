@@ -9,13 +9,6 @@ sudo apt-get install nginx -y
 # Start nginx web server 
 sudo systemctl start nginx
 
-# Modify the configuration file to setup reverse proxy
-sudo sed "s/_;/192.168.10.100;/" /etc/nginx/sites-available/default
-sudo sed "s/# First attempt to serve request as file, then/proxy_pass http:\/\/localhost:3000;/" /etc/nginx/sites-available/default
-
-
-sudo systemctl nginx restart
-
 # Display nginx web server status to check it is running
 sudo systemctl status nginx
 
@@ -28,6 +21,10 @@ sudo npm install pm2 -g
 # Add database host IP info to .bashrc
 echo -e "\nexport DB_HOST=mongodb://192.168.10.150:27017/posts" | sudo tee -a .bashrc
 source .bashrc
+
+# Copy the configuration file to setup reverse proxy
+sudo cp /home/vagrant/nginx_config/default /etc/nginx/sites-available/default
+sudo systemctl restart nginx
 
 # Install npm in app directory and run the app
 cd app

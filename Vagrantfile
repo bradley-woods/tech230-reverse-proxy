@@ -23,5 +23,8 @@ Vagrant.configure("2") do |config|
 
     # sync app folder from local machine to the VM
     app.vm.synced_folder "app", "/home/vagrant/app"
+    
+    # sync nginx_config folder from local machine to the VM
+    app.vm.synced_folder "nginx_config", "/home/vagrant/nginx_config"
   end
 end
