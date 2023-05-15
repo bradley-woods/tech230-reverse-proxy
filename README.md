@@ -194,7 +194,7 @@ Now we will set up the Nginx web server as a reverse proxy so instead of accessi
 6. Next, we need to restart Nginx using the command as follows:
 
     ```bash
-    $ sudo service nginx restart
+    $ sudo systemctl restart nginx
     ```
 
 7. Now, given the connection between VMs was established correctly (process outlined [here](https://github.com/bradley-woods/tech230-multimachine)) you should be able to navigate to your app folder using `cd app` and start your app using:

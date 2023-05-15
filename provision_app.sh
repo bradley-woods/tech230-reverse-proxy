@@ -9,6 +9,13 @@ sudo apt-get install nginx -y
 # Start nginx web server 
 sudo systemctl start nginx
 
+# Modify the configuration file to setup reverse proxy
+sudo sed "s/_;/192.168.10.100;/" /etc/nginx/sites-available/default
+sudo sed "s/# First attempt to serve request as file, then/proxy_pass http:\/\/localhost:3000;/" /etc/nginx/sites-available/default
+
+
+sudo systemctl nginx restart
+
 # Display nginx web server status to check it is running
 sudo systemctl status nginx
 
